@@ -3,15 +3,16 @@ version: 2.1
 docker_sbt: &docker_sbt
   docker:
     - image: circleci/openjdk:8-jdk-stretch
-      environment:
-        AWS_REGION: eu-west-1
-        DEBIAN_FRONTEND: noninteractive
-        SBT_OPTS: -Xmx2G -Xss256m
-  working_directory: ~/repo
+
+jobs:
+  test:
+    <<: *docker_sbt
+    steps:
+      - checkout
+      - run: sbt test
 
 workflows:
   version: 2
   api:
     jobs:
-      - run:
-          command: sbt test
+      - test
